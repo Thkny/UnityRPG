@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../GitHub/Game"
+		},
+		{
+			"path": "Projetinho/Assets/Script"
+		}
+	],
+	"settings": {
+		"dotnet.defaultSolution": "Game.sln"
+	}
+}

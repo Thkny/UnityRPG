@@ -5,26 +5,21 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
-    // dash //
-
-    private bool canDash = true;
-    private bool isDashing; // dash ativo
-    private float dashingPower = 1000f; // força do dash
-    private float dashingTime = 0.2f; //tempo do dash né
-    private float dashingCoolDown = 0.5f;
-    [SerializeField] TrailRenderer tr;
-
-    // mana ou coisa do tipo //
-
+    //! MANA !//
     public float manaInicial = 100f;
     public float decrementoMana = 1f;
     public float manaAtual;
     public Slider sliderMana;
 
 
-    // personagemm //
+    //! DASH !//
+    [SerializeField] float speed = 5f;
+    [SerializeField] float dashSpeed = 40f;
+    float speedAtual;
+
+
+    //! PERSONAGEM !//
     private Rigidbody2D playerRb;
-    public float velocidade = 5f;
 
 
     void Start() {
@@ -33,38 +28,28 @@ public class Player : MonoBehaviour {
 
     }
 
+    private void start(){
+        speedAtual = speed;
+    }
+
     void Update() {
-        float eixoX = Input.GetAxisRaw("Horizontal") * velocidade;
-        float eixoY = Input.GetAxisRaw("Vertical") * velocidade;
+        float eixoX = Input.GetAxisRaw("Horizontal") * speedAtual;
+        float eixoY = Input.GetAxisRaw("Vertical") * speedAtual;
         playerRb.velocity = new Vector2(eixoX, eixoY);
 
-        if (Input.GetKeyDown("space") && canDash == true) {
-            StartCoroutine(Dash());
-        }
-
-        if (isDashing) {
-            return;
-        }
-
+        if(Input.GetKeyDown("space")){
+            speedAtual = dashSpeed;
+            Invoke("posDash", 0.1f);
+         }
     }
 
     void atualizarSliderMana() {
         sliderMana.value = manaAtual / manaInicial;
     }
 
-    IEnumerator Dash() {
-        canDash = false;
-        isDashing = true;
-        float originalGravity = playerRb.gravityScale;
-        playerRb.gravityScale = 0f;
-        playerRb.velocity = new Vector2(transform.localScale.x * dashingPower, 0);
-        tr.emitting = true;
-        yield return new WaitForSeconds(dashingTime);
-        tr.emitting = false;
-        playerRb.gravityScale = originalGravity;
-        isDashing = false;
-        yield return new WaitForSeconds(dashingCoolDown);
-        canDash = true;
+    void posDash(){
+        speedAtual = speed;
     }
+
 }
 
